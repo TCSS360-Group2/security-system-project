@@ -1,6 +1,7 @@
 package com.company;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,12 +9,12 @@ public class Main {
     public static void main(String[] args) {
         Timer timer = new Timer();
         BaseStation baseStation = new BaseStation();
+        baseStation.init();
 
-        Peripheral peripherals[] = {
-                new MotionSensor(),
-                new MotionSensor(),
-                new MotionSensor(),
-        };
+        ArrayList<Peripheral> peripherals = new ArrayList<>();
+        peripherals.add(new MotionSensor());
+        peripherals.add(new MotionSensor());
+        peripherals.add(new MotionSensor());
 
         for (Peripheral peripheral : peripherals) {
             peripheral.init();
@@ -26,16 +27,17 @@ public class Main {
                 switch (this.eventCounter) {
                     case 0:
                         MotionSensor sensor = new MotionSensor();
-                        baseStation.register(sensor);
+                        peripherals.add(sensor);
+                        sensor.registerWithBaseStation(baseStation);
                         break;
                     case 1:
-                        peripherals[1].deactivate();
+                        peripherals.get(1).deactivate();
                         break;
                     case 2:
-                        // Delay
+                        peripherals.get(3).activate();
                         break;
                     case 3:
-                        peripherals[1].activate();
+                        peripherals.get(1).activate();
                         break;
                     default:
                         timer.cancel();

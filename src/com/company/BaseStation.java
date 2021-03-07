@@ -13,8 +13,11 @@ public final class BaseStation extends Device {
         this.pingTimer.schedule(this.pingWorker, 3000, 3000);
     }
 
-    public boolean register(Peripheral peripheral) {
-        // check if already exists
+    public synchronized boolean register(Peripheral peripheral) {
+        if (!this.hasPower()) { return false; }
+        if (peripheral == null) { return false; }
+        if (this.peripheralMap.containsValue(peripheral)) {  return true; }
+
         this.peripheralMap.put(peripheral.getID(), peripheral);
         System.out.printf("Registered %s with %s.\n", peripheral.getID(), this.getID());
         return true;
@@ -24,8 +27,9 @@ public final class BaseStation extends Device {
         this.activate();
     }
 
-    private void pingPeripherals() {
-        System.out.println("Pinging everyone!");
+    private synchronized void pingPeripherals() {
+        if (!this.hasPower()) { return; }
+
         ArrayList<String> toRemove = new ArrayList<>();
 
         this.peripheralMap.forEach((peripheralID, peripheral) -> {
@@ -37,6 +41,8 @@ public final class BaseStation extends Device {
                 System.out.println("Success!");
             }
         });
+        
+        System.out.println();
 
         toRemove.forEach(peripheralID -> {
             this.peripheralMap.remove(peripheralID);

@@ -2,7 +2,6 @@ package com.company;
 
 public abstract class Peripheral extends Device {
     private BaseStation baseStation = null;
-    private boolean connectedToBaseStation = false;
 
     public enum PeripheralType {
         MotionSensor,
@@ -28,7 +27,6 @@ public abstract class Peripheral extends Device {
     @Override
     protected void activate() {
         super.activate();
-
         this.registerWithBaseStation(this.baseStation);
     }
 
@@ -38,10 +36,9 @@ public abstract class Peripheral extends Device {
 
     public void registerWithBaseStation(BaseStation baseStationRef) {
         if (baseStationRef == null) { return; }
+//        if (baseStationRef == this.baseStation) { return; }
 
         this.baseStation = baseStationRef;
-        if (baseStationRef.register(this)) {
-            this.connectedToBaseStation = true;
-        }
+        baseStationRef.register(this);
     }
 }
