@@ -41,7 +41,7 @@ public final class BaseStation extends Device {
                 System.out.println("Success!");
             }
         });
-        
+
         System.out.println();
 
         toRemove.forEach(peripheralID -> {

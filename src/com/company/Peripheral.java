@@ -36,7 +36,6 @@ public abstract class Peripheral extends Device {
 
     public void registerWithBaseStation(BaseStation baseStationRef) {
         if (baseStationRef == null) { return; }
-//        if (baseStationRef == this.baseStation) { return; }
 
         this.baseStation = baseStationRef;
         baseStationRef.register(this);
