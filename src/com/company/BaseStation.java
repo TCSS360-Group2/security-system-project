@@ -23,6 +23,10 @@ public final class BaseStation extends Device {
         return true;
     }
 
+    public void alert(String id) {
+        System.out.printf("%s got alert from %s.\n", this.getID(), id);
+    }
+
     protected void init() {
         this.activate();
     }

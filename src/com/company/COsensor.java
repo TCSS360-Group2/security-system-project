@@ -3,12 +3,12 @@ package com.company;
 public class COsensor extends Peripheral{
     public static int threshold = 80;
 
-    COsensor(PeripheralType peripheralType) {
-        super(peripheralType);
+    COsensor() {
+        super(PeripheralType.COsensor);
     }
 
-    protected void poll(int sensorData) {
+    public void poll(int sensorData) {
         if (sensorData > threshold)
-            alert(getID());
+            alert();
     }
 }

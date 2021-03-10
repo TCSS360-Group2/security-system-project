@@ -3,14 +3,12 @@ package com.company;
 public class WaterSensor extends Peripheral{
     public static int threshold = 50;
 
-    WaterSensor(PeripheralType peripheralType) {
-        super(peripheralType);
+    WaterSensor() {
+        super(PeripheralType.WaterSensor);
     }
 
-    protected void poll(int sensorData) {
+    public void poll(int sensorData) {
         if (sensorData > threshold)
-            alert(getID());
+            alert();
     }
-
-
 }

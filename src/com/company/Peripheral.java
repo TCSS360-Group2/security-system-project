@@ -6,13 +6,29 @@ public abstract class Peripheral extends Device {
     public enum PeripheralType {
         MotionSensor,
         WaterSensor,
+        COsensor,
+        SmokeSensor,
+        TemperatureSensor,
     }
 
-    public static String getPeripheralTypeID(Peripheral.PeripheralType type) {
-        return switch (type) {
-            case MotionSensor -> "MS";
-            case WaterSensor -> "WS";
+    public static String getPeripheralTypeID(Peripheral.PeripheralType peripheralType) {
+        return switch (peripheralType) {
+            case MotionSensor -> "MO";
+            case WaterSensor -> "WA";
+            case COsensor -> "CO";
+            case SmokeSensor -> "SM";
+            case TemperatureSensor -> "TE";
             default -> "";
+        };
+    }
+
+    public static Peripheral newPeripheral(PeripheralType peripheralType) {
+        return switch (peripheralType) {
+            case MotionSensor -> new MotionSensor();
+            case WaterSensor -> new WaterSensor();
+            case COsensor -> new COsensor();
+            case SmokeSensor -> new SmokeSensor();
+            case TemperatureSensor -> new TemperatureSensor();
         };
     }
 
@@ -31,8 +47,10 @@ public abstract class Peripheral extends Device {
     }
 
     // call this in derived classes to alert the base station
-    protected void alert(String peripheralID) {
-        // not implemented yet
+    protected void alert() {
+        if (this.baseStation != null) {
+            this.baseStation.alert(this.getID());
+        }
     }
 
     // update your sensor data here

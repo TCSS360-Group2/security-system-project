@@ -3,12 +3,12 @@ package com.company;
 public class TemperatureSensor extends Peripheral{
     public static int threshold = 100;
 
-    TemperatureSensor(PeripheralType peripheralType) {
-        super(peripheralType);
+    TemperatureSensor() {
+        super(PeripheralType.TemperatureSensor);
     }
 
-    protected void poll(int sensorData) {
+    public void poll(int sensorData) {
         if (sensorData > threshold)
-            alert(getID());
+            alert();
     }
 }
