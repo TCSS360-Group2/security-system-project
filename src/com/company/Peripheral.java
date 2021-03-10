@@ -35,6 +35,9 @@ public abstract class Peripheral extends Device {
         // not implemented yet
     }
 
+    // update your sensor data here
+    abstract protected void poll();
+
     protected void init() {
         this.activate();
     }
