@@ -30,6 +30,11 @@ public abstract class Peripheral extends Device {
         this.registerWithBaseStation(this.baseStation);
     }
 
+    // call this in derived classes to alert the base station
+    protected void alert(String peripheralID) {
+        // not implemented yet
+    }
+
     protected void init() {
         this.activate();
     }
