@@ -1,9 +1,9 @@
 package com.company;
 
-public class WaterSensor extends Peripheral{
-    public static int threshold = 50;
+public class SmokeSensor extends Peripheral{
+    public static int threshold = 200;
 
-    WaterSensor(PeripheralType peripheralType) {
+    SmokeSensor(PeripheralType peripheralType) {
         super(peripheralType);
     }
 
@@ -11,6 +11,4 @@ public class WaterSensor extends Peripheral{
         if (sensorData > threshold)
             alert(getID());
     }
-
-
 }
