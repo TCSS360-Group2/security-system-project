@@ -1,7 +1,7 @@
 package com.company;
 
 public class TemperatureSensor extends Peripheral{
-    public static int threshold = 100;
+    public static int threshold = 80;
 
     TemperatureSensor() {
         super(PeripheralType.TemperatureSensor);

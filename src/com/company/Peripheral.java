@@ -40,11 +40,22 @@ public abstract class Peripheral extends Device {
         return this.hasPower();
     }
 
+    public void registerWithBaseStation(BaseStation baseStationRef) {
+        if (baseStationRef == null) { return; }
+
+        this.baseStation = baseStationRef;
+        baseStationRef.register(this);
+    }
+
     @Override
     protected void activate() {
         super.activate();
         this.registerWithBaseStation(this.baseStation);
     }
+
+    // update your sensor data here
+    // sensor data will range from 0-100
+    abstract public void poll(int sensorData);
 
     // call this in derived classes to alert the base station
     protected void alert() {
@@ -53,17 +64,7 @@ public abstract class Peripheral extends Device {
         }
     }
 
-    // update your sensor data here
-    abstract public void poll(int sensorData);
-
     protected void init() {
         this.activate();
-    }
-
-    public void registerWithBaseStation(BaseStation baseStationRef) {
-        if (baseStationRef == null) { return; }
-
-        this.baseStation = baseStationRef;
-        baseStationRef.register(this);
     }
 }
