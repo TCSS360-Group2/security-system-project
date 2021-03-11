@@ -3,6 +3,7 @@ package com.company;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class KeypadGUI extends JFrame{
     //The components of the GUI
@@ -11,8 +12,25 @@ public class KeypadGUI extends JFrame{
     private JPasswordField passwordField1;
     private JButton submitButton;
 
+    //Keypad buttons
+    private JButton a1Button;
+    private JButton a3Button;
+    private JButton a2Button;
+    private JButton a7Button;
+    private JButton a8Button;
+    private JButton a9Button;
+    private JButton a4Button;
+    private JButton a5Button;
+    private JButton a6Button;
+    private JButton a0Button;
+
     //The main Panel
     private JPanel main;
+
+
+
+    //The default password is 0000 for testing
+    String  password = "0000";
 
     /**
      * Creates a new keypad and handles some of the basic setup
@@ -37,9 +55,15 @@ public class KeypadGUI extends JFrame{
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                JFrame GUI = new MainGUI("Ninja Protection Service");
-                GUI.setVisible(true);
+                System.out.println(new String(passwordField1.getPassword()));
+                if(new String(passwordField1.getPassword()).equals(password) ) {
+                    setVisible(false);
+                    JFrame GUI = new MainGUI("Ninja Protection Service");
+                    GUI.setVisible(true);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Incorrect Password");
+                }
             }
         });
 
