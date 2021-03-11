@@ -68,6 +68,7 @@ public class KeypadGUI extends JFrame{
         });
 
         //As we cannot actually contact emergency services this just prints some text saying it has
+        //Will eventually alert the base station
         PANICButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,6 +77,69 @@ public class KeypadGUI extends JFrame{
                 System.out.println("Arming System...");
             }
         });
+
+        //This is the setup for all of the keys, they are exactly the same
+        a0Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "0");
+            }
+        });
+        a1Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "1");
+            }
+        });
+        a2Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "2");
+            }
+        });
+        a3Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "3");
+            }
+        });
+        a4Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "4");
+            }
+        });
+        a5Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "5");
+            }
+        });
+        a6Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "6");
+            }
+        });
+        a7Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "7");
+            }
+        });
+        a8Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "8");
+            }
+        });
+        a9Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField1.setText(new String(passwordField1.getPassword()) + "9");
+            }
+        });
+
     }
 
     /**
