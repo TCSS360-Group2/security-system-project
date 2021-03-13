@@ -1,9 +1,17 @@
 package com.company;
 
+import java.util.zip.DeflaterInputStream;
+
+enum DeviceState {
+    Home,
+    Away,
+    Disabled
+}
+
 public abstract class Device {
     private String ID;
     private static int deviceCounter = 0;
-    private boolean hasPower = false;
+    private DeviceState state = DeviceState.Disabled;
 
     protected Device(String deviceSymbol) {
         ++Device.deviceCounter;
@@ -14,24 +22,12 @@ public abstract class Device {
         return this.ID;
     }
 
-    public boolean hasPower() {
-        return this.hasPower;
+    public DeviceState getState() {
+        return this.state;
     }
 
-    protected void toggle() {
-        if (this.hasPower) {
-            this.activate();
-        } else {
-            this.deactivate();
-        }
-    }
-
-    protected void activate() {
-        this.hasPower = true;
-    }
-
-    protected void deactivate() {
-        this.hasPower = false;
+    protected void setDeviceState(DeviceState newState) {
+        this.state = newState;
     }
 
     protected abstract void init();

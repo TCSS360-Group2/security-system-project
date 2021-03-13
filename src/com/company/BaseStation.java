@@ -14,7 +14,7 @@ public final class BaseStation extends Device {
     }
 
     public synchronized boolean register(Peripheral peripheral) {
-        if (!this.hasPower()) { return false; }
+        if (this.getState() == DeviceState.Disabled) { return false; }
         if (peripheral == null) { return false; }
         if (this.peripheralMap.containsValue(peripheral)) {  return true; }
 
@@ -27,12 +27,10 @@ public final class BaseStation extends Device {
         System.out.printf("%s got alert from %s.\n", this.getID(), id);
     }
 
-    protected void init() {
-        this.activate();
-    }
+    protected void init() { }
 
     private synchronized void pingPeripherals() {
-        if (!this.hasPower()) { return; }
+        if (this.getState() == DeviceState.Disabled) { return; }
 
         ArrayList<String> toRemove = new ArrayList<>();
 

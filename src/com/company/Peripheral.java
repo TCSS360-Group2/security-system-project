@@ -37,7 +37,7 @@ public abstract class Peripheral extends Device {
     }
 
     public boolean pong() {
-        return this.hasPower();
+        return this.getState() != DeviceState.Disabled;
     }
 
     public void registerWithBaseStation(BaseStation baseStationRef) {
@@ -48,9 +48,11 @@ public abstract class Peripheral extends Device {
     }
 
     @Override
-    protected void activate() {
-        super.activate();
-        this.registerWithBaseStation(this.baseStation);
+    protected void setDeviceState(DeviceState newState) {
+        super.setDeviceState(newState);
+        if (newState != DeviceState.Disabled) {
+            this.registerWithBaseStation(this.baseStation);
+        }
     }
 
     // update your sensor data here
@@ -64,7 +66,5 @@ public abstract class Peripheral extends Device {
         }
     }
 
-    protected void init() {
-        this.activate();
-    }
+    protected void init() { }
 }
