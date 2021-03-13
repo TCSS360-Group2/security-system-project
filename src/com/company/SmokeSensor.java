@@ -6,7 +6,7 @@ public class SmokeSensor extends Peripheral{
     SmokeSensor() {
         super(PeripheralType.SmokeSensor);
     }
-
+    //this method is a poll method
     public void poll(int sensorData) {
         if (sensorData > threshold)
             alert();
