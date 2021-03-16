@@ -82,4 +82,17 @@ public abstract class Peripheral extends Device {
     public boolean getIsOn(){
         return isOn;
     }
+    public boolean getIsTriggered(){
+        return this.isTriggered;
+    }
+    public void setIsTriggered(boolean b){
+        this.isTriggered = b;
+    }
+    public boolean getIsEnabled(){
+        return this.isEnabled;
+    }
+    public void setIsEnabled(boolean b){
+        this.isEnabled = b;
+    }
+
 }
