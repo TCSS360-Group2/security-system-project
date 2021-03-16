@@ -5,13 +5,13 @@ import java.util.zip.DeflaterInputStream;
 enum DeviceState {
     Home,
     Away,
-    Disabled
+    Off
 }
 
 public abstract class Device {
     private String ID;
     private static int deviceCounter = 0;
-    private DeviceState state = DeviceState.Disabled;
+    private DeviceState state = DeviceState.Off;
 
     protected Device(String deviceSymbol) {
         ++Device.deviceCounter;
