@@ -2,7 +2,7 @@ package com.company;
 
 public abstract class Peripheral extends Device {
     private BaseStation baseStation = null;
-    
+
     private boolean isOn;
     private boolean isEnabled;
     private boolean isTriggered;
@@ -45,7 +45,9 @@ public abstract class Peripheral extends Device {
     }
 
     public void registerWithBaseStation(BaseStation baseStationRef) {
-        if (baseStationRef == null) { return; }
+        if (baseStationRef == null) {
+            return;
+        }
 
         this.baseStation = baseStationRef;
         baseStationRef.register(this);
@@ -70,5 +72,11 @@ public abstract class Peripheral extends Device {
         }
     }
 
-    protected void init() { }
+    protected void init() {
+    }
+
+    public void buttonPress() {
+        if (!this.isOn) this.isOn = true;
+        else this.isOn = false;
+    }
 }
