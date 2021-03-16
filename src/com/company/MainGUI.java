@@ -20,6 +20,7 @@ public class MainGUI extends JFrame{
     private JPanel cameras;
     private JPanel burglaryPane;
     private JPanel environmentalPane;
+    private JButton systemPowerButton;
 
 
     //Base Station

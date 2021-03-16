@@ -9,6 +9,7 @@ public class SensorPanel extends JPanel {
     public JLabel status;
     private JLabel connection;
     private JPanel mainPanel;
+    public JButton powerOffButton;
 
     /**
      * The a simple JPanel to represent the sensors
