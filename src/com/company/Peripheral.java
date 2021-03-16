@@ -2,6 +2,10 @@ package com.company;
 
 public abstract class Peripheral extends Device {
     private BaseStation baseStation = null;
+    
+    private boolean isOn;
+    private boolean isEnabled;
+    private boolean isTriggered;
 
     public enum PeripheralType {
         MotionSensor,
