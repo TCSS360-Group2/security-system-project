@@ -43,27 +43,27 @@ public class MainGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(disarmSystemButton.getText() == "Disarm System"){
-                    disarmSystemButton.setText("Arm System");
+                if(disarmSystemButton.getText() == "Home Mode"){
+                    disarmSystemButton.setText("Away Mode");
                     disarmSystemButton.setBackground(new Color(120,24,37));
 
                     //Change all the sensor values
                     for(Component component: burglaryPane.getComponents()){
                         if(component instanceof SensorPanel){
-                            ((SensorPanel)component).status.setText("Status: Disarmed");
+                            ((SensorPanel)component).status.setText("Status: Disabled");
                         }
                     }
 
                     //This is where I would tell the base station to arm/disarm the system
                 }
                 else{
-                    disarmSystemButton.setText("Disarm System");
+                    disarmSystemButton.setText("Home Mode");
                     disarmSystemButton.setBackground(new Color(179,241,157));
 
                     //Change all the sensor values
                     for(Component component: burglaryPane.getComponents()){
                         if(component instanceof SensorPanel){
-                            ((SensorPanel)component).status.setText("Status: Armed");
+                            ((SensorPanel)component).status.setText("Status: Enabled");
                         }
                     }
                 }
@@ -85,7 +85,7 @@ public class MainGUI extends JFrame{
                 for(int i = 0; i < options.length; i++){
                     if(selectedString.equals(options[i].toString()) && i < 2){
                         burglaryPane.setLayout(new BoxLayout(burglaryPane, BoxLayout.PAGE_AXIS));
-                        burglaryPane.add(new SensorPanel(sensorName,"Status: Armed", "Connected"));
+                        burglaryPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected"));
                         burglaryPane.revalidate();
                     }
                     else{
