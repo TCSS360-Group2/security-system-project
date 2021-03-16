@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainGUI extends JFrame{
     //Main Panels
@@ -20,10 +21,14 @@ public class MainGUI extends JFrame{
     private JPanel cameras;
     private JPanel burglaryPane;
     private JPanel environmentalPane;
+    private JButton systemPowerButton;
 
 
     //Base Station
     private BaseStation station;
+
+    //Sensors
+    ArrayList<Peripheral> sensors = new ArrayList<Peripheral>();
 
     public MainGUI(String title){
         super(title);
@@ -37,37 +42,54 @@ public class MainGUI extends JFrame{
      * */
     public void setupActions(){
         station = new BaseStation();
+        station.setDeviceState(DeviceState.Away);
 
         //Arm Disarm Listener: Changes button color and text, updates sensor text, eventually will update the system too
         disarmSystemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(disarmSystemButton.getText() == "Disarm System"){
-                    disarmSystemButton.setText("Arm System");
-                    disarmSystemButton.setBackground(new Color(120,24,37));
+                if(disarmSystemButton.getText() == "Home Mode"){
+                    disarmSystemButton.setText("Away Mode");
+                    disarmSystemButton.setBackground(new Color(255,0,8));
+                    //Change the base station state
+                    station.setDeviceState(DeviceState.Away);
+                    System.out.println(station.getState());
 
                     //Change all the sensor values
                     for(Component component: burglaryPane.getComponents()){
                         if(component instanceof SensorPanel){
-                            ((SensorPanel)component).status.setText("Status: Disarmed");
+                            ((SensorPanel)component).status.setText("Status: Disabled");
                         }
                     }
+                    //Change all sensor state to home
+                    for(Peripheral peripheral: sensors){
+                        peripheral.setDeviceState(DeviceState.Home);
+                    }
 
-                    //This is where I would tell the base station to arm/disarm the system
+
                 }
                 else{
-                    disarmSystemButton.setText("Disarm System");
+                    disarmSystemButton.setText("Home Mode");
                     disarmSystemButton.setBackground(new Color(179,241,157));
 
+                    //Change the base station state
+                    station.setDeviceState(DeviceState.Home);
+                    System.out.println(station.getState());
                     //Change all the sensor values
                     for(Component component: burglaryPane.getComponents()){
                         if(component instanceof SensorPanel){
-                            ((SensorPanel)component).status.setText("Status: Armed");
+                            ((SensorPanel)component).status.setText("Status: Enabled");
                         }
+                    }
+                    //Change all sensor state to away
+                    for(Peripheral peripheral: sensors){
+                        peripheral.setDeviceState(DeviceState.Away);
                     }
                 }
                 repaint();
+
+
 
             }
         });
@@ -76,21 +98,52 @@ public class MainGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //First Select a sensor to add then select a name for the sensor
-                Object[] options = {"Glassbreak", "Motion", "Smoke", "Water", "C02"};
+                Object[] options = {"Motion", "Smoke", "Water","Temperature", "CO"};
                 Object selected = JOptionPane.showInputDialog(panel1, "Choose a sensor", "Menu",JOptionPane.PLAIN_MESSAGE, null, options,options[0]);
                 String selectedString = selected.toString();
                 String sensorName = JOptionPane.showInputDialog(panel1, "Name your sensor", null);
 
+
+                //Then register the sensor with the base station
+                Peripheral sensor;
+                if(selectedString.equals("Motion")){
+                    //pass
+                    sensor = new SmokeSensor();
+                }
+                else if(selectedString.equals("Smoke")){
+                    sensor = new SmokeSensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
+                else if(selectedString.equals("Water")){
+                     sensor = new WaterSensor();
+                    sensor.setDeviceState((DeviceState.Away));
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
+                else if(selectedString.equals("Temperature")){
+                    sensor = new TemperatureSensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
+                else{
+                    sensor = new COsensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
                 //Add the sensor to the status screen
                 for(int i = 0; i < options.length; i++){
                     if(selectedString.equals(options[i].toString()) && i < 2){
                         burglaryPane.setLayout(new BoxLayout(burglaryPane, BoxLayout.PAGE_AXIS));
-                        burglaryPane.add(new SensorPanel(sensorName,"Status: Armed", "Connected"));
+                        burglaryPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected",sensor,station));
                         burglaryPane.revalidate();
                     }
                     else{
                         environmentalPane.setLayout(new BoxLayout(environmentalPane, BoxLayout.PAGE_AXIS));
-                        environmentalPane.add(new SensorPanel(sensorName,null, "Connected"));
+                        environmentalPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected",sensor,station));
                         environmentalPane.revalidate();
                     }
                     mainPanel.revalidate();
@@ -101,7 +154,6 @@ public class MainGUI extends JFrame{
 
                 mainPanel.revalidate();
                 repaint();
-                //Then register the sensor with the base station
 
             }
         });
@@ -119,6 +171,67 @@ public class MainGUI extends JFrame{
                 repaint();
             }
         });
+
+        //A listener for the main system power button
+        systemPowerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(systemPowerButton.getText() == "Power Off"){
+                    systemPowerButton.setText("Power On");
+                    systemPowerButton.setBackground(new Color(179,241,157));
+                    updateAllSensorsPower("Power Off");
+
+                }
+                else{
+                    systemPowerButton.setText("Power Off");
+                    systemPowerButton.setBackground(new Color(255,0,9));
+                    updateAllSensorsPower("Power On");
+                }
+            }
+        });
+    }
+    /**
+     * A method to update all of the visual features and device states for sensors on power state change
+     * */
+    public void updateAllSensorsPower(String state){
+        if(state.equals("Power On")){
+            for(Component component: burglaryPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power Off");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(255,0,9));
+                }
+            }
+            for(Component component: environmentalPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power Off");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(255,0,9));
+                }
+            }
+            //TODO: Need to update to power off when the new states are added
+            for(Peripheral peripheral: sensors){
+                peripheral.setDeviceState(DeviceState.Disabled);
+            }
+        }
+        else{
+            for(Component component: burglaryPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power On");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(179,241,157));
+                }
+            }
+            for(Component component: environmentalPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power On");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(179,241,157));
+                }
+            }
+            //TODO: Need to update to power on when the new states are added
+            for(Peripheral peripheral: sensors){
+                peripheral.setDeviceState(DeviceState.Home);
+                station.register(peripheral);
+            }
+        }
+
     }
 
 
