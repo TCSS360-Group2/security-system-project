@@ -62,6 +62,10 @@ public class MainGUI extends JFrame{
                             ((SensorPanel)component).status.setText("Status: Disabled");
                         }
                     }
+                    //Change all sensor state to home
+                    for(Peripheral peripheral: sensors){
+                        peripheral.setDeviceState(DeviceState.Home);
+                    }
 
 
                 }
@@ -78,8 +82,13 @@ public class MainGUI extends JFrame{
                             ((SensorPanel)component).status.setText("Status: Enabled");
                         }
                     }
+                    //Change all sensor state to away
+                    for(Peripheral peripheral: sensors){
+                        peripheral.setDeviceState(DeviceState.Away);
+                    }
                 }
                 repaint();
+
 
 
             }
@@ -181,7 +190,7 @@ public class MainGUI extends JFrame{
         });
     }
     /**
-     * A method to update all of the visual features for sensors on power state change
+     * A method to update all of the visual features and device states for sensors on power state change
      * */
     public void updateAllSensorsPower(String state){
         if(state.equals("Power On")){
@@ -197,6 +206,10 @@ public class MainGUI extends JFrame{
                     ((SensorPanel)component).powerOffButton.setBackground(new Color(255,0,9));
                 }
             }
+            //TODO: Need to update to power off when the new states are added
+            for(Peripheral peripheral: sensors){
+                peripheral.setDeviceState(DeviceState.Disabled);
+            }
         }
         else{
             for(Component component: burglaryPane.getComponents()){
@@ -210,6 +223,11 @@ public class MainGUI extends JFrame{
                     ((SensorPanel)component).powerOffButton.setText("Power On");
                     ((SensorPanel)component).powerOffButton.setBackground(new Color(179,241,157));
                 }
+            }
+            //TODO: Need to update to power on when the new states are added
+            for(Peripheral peripheral: sensors){
+                peripheral.setDeviceState(DeviceState.Home);
+                station.register(peripheral);
             }
         }
 
