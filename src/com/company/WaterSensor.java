@@ -8,7 +8,7 @@ public class WaterSensor extends Peripheral{
     }
 
     public void poll(int sensorData) {
-        if (sensorData > threshold)
+        if (this.getIsOn() && (sensorData > threshold))
             alert();
     }
 }

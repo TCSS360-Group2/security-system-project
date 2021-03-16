@@ -8,7 +8,7 @@ public class SmokeSensor extends Peripheral{
     }
     //this method is a poll method
     public void poll(int sensorData) {
-        if (sensorData > threshold)
+        if (this.getIsOn() && (sensorData > threshold))
             alert();
     }
 }

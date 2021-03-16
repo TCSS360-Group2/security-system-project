@@ -79,4 +79,7 @@ public abstract class Peripheral extends Device {
         if (!this.isOn) this.isOn = true;
         else this.isOn = false;
     }
+    public boolean getIsOn(){
+        return isOn;
+    }
 }
