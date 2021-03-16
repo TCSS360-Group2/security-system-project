@@ -210,6 +210,7 @@ public class MainGUI extends JFrame{
             //TODO: Need to update to power off when the new states are added
             for(Peripheral peripheral: sensors){
                 peripheral.setDeviceState(DeviceState.Off);
+                peripheral.buttonPress();
             }
         }
         else{
@@ -228,6 +229,7 @@ public class MainGUI extends JFrame{
             //TODO: Need to update to power on when the new states are added
             for(Peripheral peripheral: sensors){
                 peripheral.setDeviceState(DeviceState.Home);
+                peripheral.buttonPress();
                 station.register(peripheral);
             }
         }
