@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainGUI extends JFrame{
     //Main Panels
@@ -26,6 +27,9 @@ public class MainGUI extends JFrame{
     //Base Station
     private BaseStation station;
 
+    //Sensors
+    ArrayList<Peripheral> sensors = new ArrayList<Peripheral>();
+
     public MainGUI(String title){
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,6 +42,7 @@ public class MainGUI extends JFrame{
      * */
     public void setupActions(){
         station = new BaseStation();
+        station.setDeviceState(DeviceState.Away);
 
         //Arm Disarm Listener: Changes button color and text, updates sensor text, eventually will update the system too
         disarmSystemButton.addActionListener(new ActionListener() {
@@ -47,6 +52,9 @@ public class MainGUI extends JFrame{
                 if(disarmSystemButton.getText() == "Home Mode"){
                     disarmSystemButton.setText("Away Mode");
                     disarmSystemButton.setBackground(new Color(255,0,8));
+                    //Change the base station state
+                    station.setDeviceState(DeviceState.Away);
+                    System.out.println(station.getState());
 
                     //Change all the sensor values
                     for(Component component: burglaryPane.getComponents()){
@@ -55,12 +63,15 @@ public class MainGUI extends JFrame{
                         }
                     }
 
-                    //This is where I would tell the base station to arm/disarm the system
+
                 }
                 else{
                     disarmSystemButton.setText("Home Mode");
                     disarmSystemButton.setBackground(new Color(179,241,157));
 
+                    //Change the base station state
+                    station.setDeviceState(DeviceState.Home);
+                    System.out.println(station.getState());
                     //Change all the sensor values
                     for(Component component: burglaryPane.getComponents()){
                         if(component instanceof SensorPanel){
@@ -70,6 +81,7 @@ public class MainGUI extends JFrame{
                 }
                 repaint();
 
+
             }
         });
         //Connect/Disconnect Listener: Just adds a new sensor, there is no disconnect feature
@@ -77,7 +89,7 @@ public class MainGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //First Select a sensor to add then select a name for the sensor
-                Object[] options = {"Glassbreak", "Motion", "Smoke", "Water", "C02"};
+                Object[] options = {"Motion", "Smoke", "Water","Temperature", "CO"};
                 Object selected = JOptionPane.showInputDialog(panel1, "Choose a sensor", "Menu",JOptionPane.PLAIN_MESSAGE, null, options,options[0]);
                 String selectedString = selected.toString();
                 String sensorName = JOptionPane.showInputDialog(panel1, "Name your sensor", null);
@@ -91,7 +103,7 @@ public class MainGUI extends JFrame{
                     }
                     else{
                         environmentalPane.setLayout(new BoxLayout(environmentalPane, BoxLayout.PAGE_AXIS));
-                        environmentalPane.add(new SensorPanel(sensorName,null, "Connected"));
+                        environmentalPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected"));
                         environmentalPane.revalidate();
                     }
                     mainPanel.revalidate();
@@ -103,6 +115,35 @@ public class MainGUI extends JFrame{
                 mainPanel.revalidate();
                 repaint();
                 //Then register the sensor with the base station
+
+                if(selectedString.equals("Motion")){
+                    //pass
+                }
+                else if(selectedString.equals("Smoke")){
+                    SmokeSensor smokeSensor = new SmokeSensor();
+                    smokeSensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(smokeSensor));
+                    sensors.add(smokeSensor);
+                }
+                else if(selectedString.equals("Water")){
+                    WaterSensor waterSensor = new WaterSensor();
+                    waterSensor.setDeviceState((DeviceState.Away));
+                    System.out.println(station.register(waterSensor));
+                    sensors.add(waterSensor);
+                }
+                else if(selectedString.equals("Temperature")){
+                    TemperatureSensor TemperatureSensor = new TemperatureSensor();
+                    TemperatureSensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(TemperatureSensor));
+                    sensors.add(TemperatureSensor);
+                }
+                else{
+                    COsensor COSensor = new COsensor();
+                    COSensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(COSensor));
+                    sensors.add(COSensor);
+                }
+
 
             }
         });
