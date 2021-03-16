@@ -68,7 +68,8 @@ public abstract class Peripheral extends Device {
     // call this in derived classes to alert the base station
     protected void alert() {
         if (this.baseStation != null) {
-            this.baseStation.alert(this.getID());
+            this.baseStation.alert(this);
+
         }
     }
 

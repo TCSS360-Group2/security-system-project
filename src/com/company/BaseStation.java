@@ -23,8 +23,9 @@ public final class BaseStation extends Device {
         return true;
     }
 
-    public void alert(String id) {
-        System.out.printf("%s got alert from %s.\n", this.getID(), id);
+    public void alert(Peripheral per) {
+        System.out.printf("%s got alert from %s.\n", this.getID(), per.getID());
+
     }
 
     protected void init() { }
