@@ -209,7 +209,7 @@ public class MainGUI extends JFrame{
             }
             //TODO: Need to update to power off when the new states are added
             for(Peripheral peripheral: sensors){
-                peripheral.setDeviceState(DeviceState.Disabled);
+                peripheral.setDeviceState(DeviceState.Off);
             }
         }
         else{

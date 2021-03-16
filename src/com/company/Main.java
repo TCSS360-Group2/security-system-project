@@ -31,7 +31,7 @@ public class Main {
                         peripheral.registerWithBaseStation(baseStation);
                         break;
                     case 1:
-                        peripheralController.peripherals.get(1).setDeviceState(DeviceState.Disabled);
+                        peripheralController.peripherals.get(1).setDeviceState(DeviceState.Off);
                         break;
                     case 2:
                         peripheralController.peripherals.get(3).setDeviceState(DeviceState.Home);

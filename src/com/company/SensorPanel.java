@@ -39,7 +39,7 @@ public class SensorPanel extends JPanel {
                 if(powerOffButton.getText().equals("Power Off")) {
                     powerOffButton.setText("Power On");
                     powerOffButton.setBackground(new Color(179,241,157));
-                    peripheral.setDeviceState(DeviceState.Disabled);
+                    peripheral.setDeviceState(DeviceState.Off);
                 }
                 else{
                     powerOffButton.setText("Power Off");

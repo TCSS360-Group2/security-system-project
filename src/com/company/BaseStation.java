@@ -14,7 +14,7 @@ public final class BaseStation extends Device {
     }
 
     public synchronized boolean register(Peripheral peripheral) {
-        if (this.getState() == DeviceState.Disabled) { return false; }
+        if (this.getState() == DeviceState.Off) { return false; }
         if (peripheral == null) { return false; }
         if (this.peripheralMap.containsValue(peripheral)) {  return true; }
 
@@ -30,7 +30,7 @@ public final class BaseStation extends Device {
     protected void init() { }
 
     private synchronized void pingPeripherals() {
-        if (this.getState() == DeviceState.Disabled) { return; }
+        if (this.getState() == DeviceState.Off) { return; }
 
         ArrayList<String> toRemove = new ArrayList<>();
 

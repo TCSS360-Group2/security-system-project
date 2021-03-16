@@ -37,7 +37,7 @@ public abstract class Peripheral extends Device {
     }
 
     public boolean pong() {
-        return this.getState() != DeviceState.Disabled;
+        return this.getState() != DeviceState.Off;
     }
 
     public void registerWithBaseStation(BaseStation baseStationRef) {
@@ -50,7 +50,7 @@ public abstract class Peripheral extends Device {
     @Override
     protected void setDeviceState(DeviceState newState) {
         super.setDeviceState(newState);
-        if (newState != DeviceState.Disabled) {
+        if (newState != DeviceState.Off) {
             this.registerWithBaseStation(this.baseStation);
         }
     }
