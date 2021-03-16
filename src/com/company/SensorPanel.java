@@ -2,6 +2,8 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SensorPanel extends JPanel {
 
@@ -20,8 +22,26 @@ public class SensorPanel extends JPanel {
         this.status.setText(status);
         this.connection.setText(connection);
         add(mainPanel);
+        setupActions();
 
-
+    }
+    /**
+     * A method to set up all the action listeners for the sensor panels
+     * */
+    public void setupActions(){
+        powerOffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(powerOffButton.getText().equals("Power Off")) {
+                    powerOffButton.setText("Power On");
+                    powerOffButton.setBackground(new Color(179,241,157));
+                }
+                else{
+                    powerOffButton.setText("Power Off");
+                    powerOffButton.setBackground(new Color(255,0,9));
+                }
+            }
+        });
     }
 
     //This is for testing purposes

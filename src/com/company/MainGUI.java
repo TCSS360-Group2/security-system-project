@@ -46,7 +46,7 @@ public class MainGUI extends JFrame{
 
                 if(disarmSystemButton.getText() == "Home Mode"){
                     disarmSystemButton.setText("Away Mode");
-                    disarmSystemButton.setBackground(new Color(120,24,37));
+                    disarmSystemButton.setBackground(new Color(255,0,8));
 
                     //Change all the sensor values
                     for(Component component: burglaryPane.getComponents()){
@@ -120,6 +120,58 @@ public class MainGUI extends JFrame{
                 repaint();
             }
         });
+
+        //A listener for the main system power button
+        systemPowerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(systemPowerButton.getText() == "Power Off"){
+                    systemPowerButton.setText("Power On");
+                    systemPowerButton.setBackground(new Color(179,241,157));
+                    updateAllSensorsPower("Power Off");
+
+                }
+                else{
+                    systemPowerButton.setText("Power Off");
+                    systemPowerButton.setBackground(new Color(255,0,9));
+                    updateAllSensorsPower("Power On");
+                }
+            }
+        });
+    }
+    /**
+     * A method to update all of the visual features for sensors on power state change
+     * */
+    public void updateAllSensorsPower(String state){
+        if(state.equals("Power On")){
+            for(Component component: burglaryPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power Off");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(255,0,9));
+                }
+            }
+            for(Component component: environmentalPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power Off");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(255,0,9));
+                }
+            }
+        }
+        else{
+            for(Component component: burglaryPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power On");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(179,241,157));
+                }
+            }
+            for(Component component: environmentalPane.getComponents()){
+                if(component instanceof SensorPanel){
+                    ((SensorPanel)component).powerOffButton.setText("Power On");
+                    ((SensorPanel)component).powerOffButton.setBackground(new Color(179,241,157));
+                }
+            }
+        }
+
     }
 
 
