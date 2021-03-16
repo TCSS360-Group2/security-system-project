@@ -103,16 +103,47 @@ public class MainGUI extends JFrame{
                 String selectedString = selected.toString();
                 String sensorName = JOptionPane.showInputDialog(panel1, "Name your sensor", null);
 
+
+                //Then register the sensor with the base station
+                Peripheral sensor;
+                if(selectedString.equals("Motion")){
+                    //pass
+                    sensor = new SmokeSensor();
+                }
+                else if(selectedString.equals("Smoke")){
+                    sensor = new SmokeSensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
+                else if(selectedString.equals("Water")){
+                     sensor = new WaterSensor();
+                    sensor.setDeviceState((DeviceState.Away));
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
+                else if(selectedString.equals("Temperature")){
+                    sensor = new TemperatureSensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
+                else{
+                    sensor = new COsensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    System.out.println(station.register(sensor));
+                    sensors.add(sensor);
+                }
                 //Add the sensor to the status screen
                 for(int i = 0; i < options.length; i++){
                     if(selectedString.equals(options[i].toString()) && i < 2){
                         burglaryPane.setLayout(new BoxLayout(burglaryPane, BoxLayout.PAGE_AXIS));
-                        burglaryPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected"));
+                        burglaryPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected",sensor,station));
                         burglaryPane.revalidate();
                     }
                     else{
                         environmentalPane.setLayout(new BoxLayout(environmentalPane, BoxLayout.PAGE_AXIS));
-                        environmentalPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected"));
+                        environmentalPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected",sensor,station));
                         environmentalPane.revalidate();
                     }
                     mainPanel.revalidate();
@@ -123,36 +154,6 @@ public class MainGUI extends JFrame{
 
                 mainPanel.revalidate();
                 repaint();
-                //Then register the sensor with the base station
-
-                if(selectedString.equals("Motion")){
-                    //pass
-                }
-                else if(selectedString.equals("Smoke")){
-                    SmokeSensor smokeSensor = new SmokeSensor();
-                    smokeSensor.setDeviceState(DeviceState.Away);
-                    System.out.println(station.register(smokeSensor));
-                    sensors.add(smokeSensor);
-                }
-                else if(selectedString.equals("Water")){
-                    WaterSensor waterSensor = new WaterSensor();
-                    waterSensor.setDeviceState((DeviceState.Away));
-                    System.out.println(station.register(waterSensor));
-                    sensors.add(waterSensor);
-                }
-                else if(selectedString.equals("Temperature")){
-                    TemperatureSensor TemperatureSensor = new TemperatureSensor();
-                    TemperatureSensor.setDeviceState(DeviceState.Away);
-                    System.out.println(station.register(TemperatureSensor));
-                    sensors.add(TemperatureSensor);
-                }
-                else{
-                    COsensor COSensor = new COsensor();
-                    COSensor.setDeviceState(DeviceState.Away);
-                    System.out.println(station.register(COSensor));
-                    sensors.add(COSensor);
-                }
-
 
             }
         });
