@@ -31,13 +31,13 @@ public class Main {
                         peripheral.registerWithBaseStation(baseStation);
                         break;
                     case 1:
-                        peripheralController.peripherals.get(1).deactivate();
+                        peripheralController.peripherals.get(1).setDeviceState(DeviceState.Disabled);
                         break;
                     case 2:
-                        peripheralController.peripherals.get(3).activate();
+                        peripheralController.peripherals.get(3).setDeviceState(DeviceState.Home);
                         break;
                     case 3:
-                        peripheralController.peripherals.get(1).activate();
+                        peripheralController.peripherals.get(1).setDeviceState(DeviceState.Home);
                         break;
                     default:
                         eventTimer.cancel();
