@@ -65,6 +65,7 @@ public class MainGUI extends JFrame{
                     //Change all sensor state to home
                     for(Peripheral peripheral: sensors){
                         peripheral.setDeviceState(DeviceState.Home);
+                        peripheral.setIsEnabled(false);
                     }
 
 
@@ -85,6 +86,7 @@ public class MainGUI extends JFrame{
                     //Change all sensor state to away
                     for(Peripheral peripheral: sensors){
                         peripheral.setDeviceState(DeviceState.Away);
+                        peripheral.setIsEnabled(true);
                     }
                 }
                 repaint();
@@ -134,6 +136,7 @@ public class MainGUI extends JFrame{
                     System.out.println(station.register(sensor));
                     sensors.add(sensor);
                 }
+                sensor.setIsEnabled(true);
                 //Add the sensor to the status screen
                 for(int i = 0; i < options.length; i++){
                     if(selectedString.equals(options[i].toString()) && i < 2){
