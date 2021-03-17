@@ -16,7 +16,7 @@ public class Siren extends Peripheral implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         //if(this.getIsEnabled())
-        System.out.println(evt.getNewValue() + "Siren");
+        System.out.println(evt.getNewValue() + " Siren");
     }
     public void init(){
         this.setIsEnabled(true);

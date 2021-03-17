@@ -49,7 +49,8 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
         station.setDeviceState(DeviceState.Away);
         //Set up alert listening for the GUI
         station.addPropertyChangeListener(this);
-
+        //Set up alert listening for
+        station.addPropertyChangeListener(new Siren());
         //Arm Disarm Listener: Changes button color and text, updates sensor text, eventually will update the system too
         disarmSystemButton.addActionListener(new ActionListener() {
             @Override
