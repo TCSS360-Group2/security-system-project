@@ -1,11 +1,11 @@
 package com.company;
 
-public class MotionSensor extends Peripheral {
-    public static int threshold = 40;
+public class GlassBreakSensor extends Peripheral{
+    public static int threshold = 80;
     private int alarmCounter;
 
-    MotionSensor() {
-        super(PeripheralType.MotionSensor);
+    GlassBreakSensor() {
+        super(PeripheralType.GlassBreakSensor);
         alarmCounter=0;
     }
 
@@ -27,10 +27,11 @@ public class MotionSensor extends Peripheral {
     protected void init(){
         this.buttonPress();
         this.setIsTriggered(false);
-        if(this.getState().equals(DeviceState.Away)){
-            this.setIsEnabled(true);
-        } else {
+        if(this.getState().equals(DeviceState.Off)){
             this.setIsEnabled(false);
+        } else {
+            this.setIsEnabled(true);
         }
+
     }
 }

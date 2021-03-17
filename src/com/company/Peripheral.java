@@ -17,7 +17,10 @@ public abstract class Peripheral extends Device {
         COsensor,
         SmokeSensor,
         TemperatureSensor,
-    }
+        EntrySensor,
+        GlassBreakSensor,
+
+        }
 
     public static String getPeripheralTypeID(Peripheral.PeripheralType peripheralType) {
         return switch (peripheralType) {
@@ -26,6 +29,8 @@ public abstract class Peripheral extends Device {
             case COsensor -> "CO";
             case SmokeSensor -> "SM";
             case TemperatureSensor -> "TE";
+            case EntrySensor -> "ES";
+            case GlassBreakSensor -> "GB";
             default -> "";
         };
     }
@@ -37,6 +42,8 @@ public abstract class Peripheral extends Device {
             case COsensor -> new COsensor();
             case SmokeSensor -> new SmokeSensor();
             case TemperatureSensor -> new TemperatureSensor();
+            case EntrySensor -> new EntrySensor();
+            case GlassBreakSensor -> new GlassBreakSensor();
         };
     }
 

@@ -1,11 +1,11 @@
 package com.company;
 
-public class MotionSensor extends Peripheral {
-    public static int threshold = 40;
+public class EntrySensor extends Peripheral {
+    public static int threshold = 75;
     private int alarmCounter;
 
-    MotionSensor() {
-        super(PeripheralType.MotionSensor);
+    EntrySensor() {
+        super(PeripheralType.EntrySensor);
         alarmCounter=0;
     }
 
