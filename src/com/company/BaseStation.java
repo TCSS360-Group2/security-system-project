@@ -1,16 +1,20 @@
 package com.company;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 public final class BaseStation extends Device {
     HashMap<String, Peripheral> peripheralMap = new HashMap<>();
     PingTask pingWorker = new PingTask(this);
     Timer pingTimer = new Timer();
-
+    PropertyChangeSupport observed;
+    String alertString;
     BaseStation() {
         super("BS");
         System.out.println(this.getID());
         this.pingTimer.schedule(this.pingWorker, 3000, 3000);
+        observed = new PropertyChangeSupport(this);
     }
 
     public synchronized boolean register(Peripheral peripheral) {
@@ -23,8 +27,12 @@ public final class BaseStation extends Device {
         return true;
     }
 
+
+
     public void alert(Peripheral per) {
+        alertString = this.getID() + " got alert from"  + per.getID();
         System.out.printf("%s got alert from %s.\n", this.getID(), per.getID());
+        observed.firePropertyChange("Alert","",this.alertString);
 
     }
 
@@ -71,4 +79,9 @@ public final class BaseStation extends Device {
             this.owner.pingTimer.cancel();
         }
     }
+
+    public void addPropertyChangeListener(PropertyChangeListener observer){
+        observed.addPropertyChangeListener(observer);
+    }
+
 }
