@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-public class MainGUI extends JFrame{
+public class MainGUI extends JFrame implements PropertyChangeListener {
     //Main Panels
     private JTabbedPane mainPanel;
     private JPanel panel1;
@@ -41,8 +43,11 @@ public class MainGUI extends JFrame{
      * Sets up all the action listeners for the various buttons across the GUI
      * */
     public void setupActions(){
+        //Set up the base station
         station = new BaseStation();
         station.setDeviceState(DeviceState.Away);
+        //Set up alert listening for the GUI
+        station.addPropertyChangeListener(this);
 
         //Arm Disarm Listener: Changes button color and text, updates sensor text, eventually will update the system too
         disarmSystemButton.addActionListener(new ActionListener() {
@@ -115,27 +120,28 @@ public class MainGUI extends JFrame{
                 else if(selectedString.equals("Smoke")){
                     sensor = new SmokeSensor();
                     sensor.setDeviceState(DeviceState.Away);
-                    System.out.println(station.register(sensor));
                     sensors.add(sensor);
+
                 }
                 else if(selectedString.equals("Water")){
                      sensor = new WaterSensor();
                     sensor.setDeviceState((DeviceState.Away));
-                    System.out.println(station.register(sensor));
                     sensors.add(sensor);
                 }
                 else if(selectedString.equals("Temperature")){
                     sensor = new TemperatureSensor();
                     sensor.setDeviceState(DeviceState.Away);
-                    System.out.println(station.register(sensor));
                     sensors.add(sensor);
                 }
                 else{
                     sensor = new COsensor();
                     sensor.setDeviceState(DeviceState.Away);
-                    System.out.println(station.register(sensor));
                     sensors.add(sensor);
                 }
+                station.register(sensor);
+                sensor.registerWithBaseStation(station);
+                //test alert
+                sensor.alert();
                 sensor.setIsEnabled(true);
                 //Add the sensor to the status screen
                 for(int i = 0; i < options.length; i++){
@@ -210,7 +216,7 @@ public class MainGUI extends JFrame{
                     ((SensorPanel)component).powerOffButton.setBackground(new Color(255,0,9));
                 }
             }
-            //TODO: Need to update to power off when the new states are added
+
             for(Peripheral peripheral: sensors){
                 peripheral.setDeviceState(DeviceState.Off);
                 peripheral.buttonPress();
@@ -229,7 +235,7 @@ public class MainGUI extends JFrame{
                     ((SensorPanel)component).powerOffButton.setBackground(new Color(179,241,157));
                 }
             }
-            //TODO: Need to update to power on when the new states are added
+
             for(Peripheral peripheral: sensors){
                 peripheral.setDeviceState(DeviceState.Home);
                 peripheral.buttonPress();
@@ -238,7 +244,11 @@ public class MainGUI extends JFrame{
         }
 
     }
-
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        //For now just print the alert
+        System.out.println( evt.getNewValue() + " in GUI");
+    }
 
     /**
      * The main method to run the GUI
@@ -247,4 +257,6 @@ public class MainGUI extends JFrame{
         JFrame frame = new MainGUI("Ninja Protection Services");
         frame.setVisible(true);
     }
+
+
 }
