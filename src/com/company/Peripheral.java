@@ -19,6 +19,7 @@ public abstract class Peripheral extends Device {
         TemperatureSensor,
         EntrySensor,
         GlassBreakSensor,
+        Siren,
 
         }
 
@@ -31,6 +32,7 @@ public abstract class Peripheral extends Device {
             case TemperatureSensor -> "TE";
             case EntrySensor -> "ES";
             case GlassBreakSensor -> "GB";
+            case Siren -> "SR";
             default -> "";
         };
     }
@@ -44,6 +46,7 @@ public abstract class Peripheral extends Device {
             case TemperatureSensor -> new TemperatureSensor();
             case EntrySensor -> new EntrySensor();
             case GlassBreakSensor -> new GlassBreakSensor();
+            case Siren -> new Siren();
         };
     }
 

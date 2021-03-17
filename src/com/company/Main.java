@@ -15,9 +15,13 @@ public class Main {
 
         peripheralController.addPeripheral(Peripheral.PeripheralType.COsensor);
         peripheralController.addPeripheral(Peripheral.PeripheralType.WaterSensor);
-        peripheralController.addPeripheral(Peripheral.PeripheralType.MotionSensor);
         peripheralController.addPeripheral(Peripheral.PeripheralType.SmokeSensor);
         peripheralController.addPeripheral(Peripheral.PeripheralType.TemperatureSensor);
+        peripheralController.addPeripheral(Peripheral.PeripheralType.MotionSensor);
+        peripheralController.addPeripheral(Peripheral.PeripheralType.GlassBreakSensor);
+        peripheralController.addPeripheral(Peripheral.PeripheralType.EntrySensor);
+        //peripheralController.addPeripheral(Peripheral.PeripheralType.Siren);
+
 
         peripheralController.registerAll(baseStation);
 
