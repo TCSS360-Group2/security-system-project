@@ -11,4 +11,8 @@ public class WaterSensor extends Peripheral{
         if (this.getIsOn() && (sensorData > threshold))
             alert();
     }
+    protected void init(){
+        this.buttonPress();
+        this.setIsEnabled(true);
+    }
 }
