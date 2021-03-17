@@ -75,10 +75,27 @@ public abstract class Peripheral extends Device {
 
     protected void init() {
     }
-
+    public void speaker(){
+        System.out.println("beep");
+    }
+    public void redFlash(){
+        System.out.println("red flash");
+    }
+    public void greenFlash(){
+        System.out.println("green flash");
+    }
     public void buttonPress() {
-        if (!this.isOn) this.isOn = true;
-        else this.isOn = false;
+        if (!this.isOn) {
+            this.isOn = true;
+            System.out.println(this.getID() + " turned on");
+            speaker();
+            greenFlash();
+        }else {
+            this.isOn = false;
+            System.out.println(this.getID() + " turned off");
+            speaker();
+            redFlash();
+        }
     }
     public boolean getIsOn(){
         return isOn;
