@@ -8,6 +8,7 @@ public final class BaseStation extends Device {
     HashMap<String, Peripheral> peripheralMap = new HashMap<>();
     PingTask pingWorker = new PingTask(this);
     Timer pingTimer = new Timer();
+
     PropertyChangeSupport observed;
     String alertString;
     BaseStation() {

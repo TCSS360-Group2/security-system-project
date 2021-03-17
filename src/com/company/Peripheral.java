@@ -1,11 +1,15 @@
 package com.company;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public abstract class Peripheral extends Device {
     private BaseStation baseStation = null;
 
     private boolean isOn;
     private boolean isEnabled;
     private boolean isTriggered;
+    protected int alarmDuration = 5;
 
     public enum PeripheralType {
         MotionSensor,
@@ -69,7 +73,7 @@ public abstract class Peripheral extends Device {
     protected void alert() {
         if (this.baseStation != null) {
             this.baseStation.alert(this);
-
+            this.setIsTriggered(true);
         }
     }
 
@@ -100,17 +104,16 @@ public abstract class Peripheral extends Device {
     public boolean getIsOn(){
         return isOn;
     }
-    public boolean getIsTriggered(){
-        return this.isTriggered;
-    }
-    public void setIsTriggered(boolean b){
-        this.isTriggered = b;
-    }
     public boolean getIsEnabled(){
         return this.isEnabled;
     }
     public void setIsEnabled(boolean b){
         this.isEnabled = b;
     }
+    public boolean getIsTriggered(){
+        return this.isTriggered;
+    }
+    public void setIsTriggered(boolean b){ this.isTriggered = b; }
+
 
 }
