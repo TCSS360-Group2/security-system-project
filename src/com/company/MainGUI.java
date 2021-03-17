@@ -24,6 +24,7 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
     private JPanel burglaryPane;
     private JPanel environmentalPane;
     private JButton systemPowerButton;
+    private JPanel notifications;
 
 
     //Base Station
@@ -142,7 +143,7 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
                 sensor.registerWithBaseStation(station);
                 //test alert
                 sensor.alert();
-                sensor.setIsEnabled(true);
+                sensor.init();
                 //Add the sensor to the status screen
                 for(int i = 0; i < options.length; i++){
                     if(selectedString.equals(options[i].toString()) && i < 2){
@@ -218,7 +219,7 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
             }
 
             for(Peripheral peripheral: sensors){
-                peripheral.setDeviceState(DeviceState.Off);
+                peripheral.setDeviceState(DeviceState.Home);
                 peripheral.buttonPress();
             }
         }
@@ -237,7 +238,7 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
             }
 
             for(Peripheral peripheral: sensors){
-                peripheral.setDeviceState(DeviceState.Home);
+                peripheral.setDeviceState(DeviceState.Off);
                 peripheral.buttonPress();
                 station.register(peripheral);
             }
@@ -248,6 +249,13 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         //For now just print the alert
         System.out.println( evt.getNewValue() + " in GUI");
+        notifications.setLayout(new BoxLayout(notifications, BoxLayout.PAGE_AXIS));
+        JLabel alert = new JLabel((String) evt.getNewValue());
+        alert.setBackground(new Color(150,100,0));
+        notifications.add(alert);
+        notifications.revalidate();
+        notifications.repaint();
+
     }
 
     /**
