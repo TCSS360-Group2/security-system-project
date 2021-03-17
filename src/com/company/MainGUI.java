@@ -107,7 +107,7 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //First Select a sensor to add then select a name for the sensor
-                Object[] options = {"Motion", "Smoke", "Water","Temperature", "CO"};
+                String[] options = {"Entry", "Glassbreak", "Motion", "Smoke", "Water","Temperature", "CO"};
                 Object selected = JOptionPane.showInputDialog(panel1, "Choose a sensor", "Menu",JOptionPane.PLAIN_MESSAGE, null, options,options[0]);
                 String selectedString = selected.toString();
                 String sensorName = JOptionPane.showInputDialog(panel1, "Name your sensor", null);
@@ -116,8 +116,19 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
                 //Then register the sensor with the base station
                 Peripheral sensor;
                 if(selectedString.equals("Motion")){
-                    //pass
-                    sensor = new SmokeSensor();
+                    sensor = new MotionSensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    sensors.add(sensor);
+                }
+                if(selectedString.equals("Glassbreak")){
+                    sensor = new GlassBreakSensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    sensors.add(sensor);
+                }
+                if(selectedString.equals("Entry")){
+                    sensor = new EntrySensor();
+                    sensor.setDeviceState(DeviceState.Away);
+                    sensors.add(sensor);
                 }
                 else if(selectedString.equals("Smoke")){
                     sensor = new SmokeSensor();
@@ -147,19 +158,27 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
                 sensor.init();
                 //Add the sensor to the status screen
                 for(int i = 0; i < options.length; i++){
-                    if(selectedString.equals(options[i].toString()) && i < 2){
+                    if(selectedString.equals(options[i]) && i <= 2){
                         burglaryPane.setLayout(new BoxLayout(burglaryPane, BoxLayout.PAGE_AXIS));
                         burglaryPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected",sensor,station));
                         burglaryPane.revalidate();
+                        mainPanel.revalidate();
+                        repaint();
+                        break;
                     }
-                    else{
+                    else if(i>2){
                         environmentalPane.setLayout(new BoxLayout(environmentalPane, BoxLayout.PAGE_AXIS));
                         environmentalPane.add(new SensorPanel(sensorName,"Status: Enabled", "Connected",sensor,station));
                         environmentalPane.revalidate();
+                        mainPanel.revalidate();
+                        repaint();
+                        break;
                     }
-                    mainPanel.revalidate();
-                    repaint();
-                    break;
+                    else{
+                        continue;
+                    }
+
+
                 }
 
 
