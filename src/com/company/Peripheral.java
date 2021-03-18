@@ -20,8 +20,7 @@ public abstract class Peripheral extends Device {
         EntrySensor,
         GlassBreakSensor,
         Siren,
-
-        }
+    }
 
     public static String getPeripheralTypeID(Peripheral.PeripheralType peripheralType) {
         return switch (peripheralType) {

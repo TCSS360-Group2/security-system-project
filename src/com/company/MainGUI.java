@@ -31,21 +31,27 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
     private BaseStation station;
 
     //Sensors
-    ArrayList<Peripheral> sensors = new ArrayList<Peripheral>();
+    private PeripheralController sensors;
 
     public MainGUI(String title){
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(panel1);
         this.pack();
-        setupActions();
+    }
+
+    public void setBaseStation(BaseStation b) {
+        this.station = b;
+    }
+
+    public void setPeripheralController(PeripheralController p) {
+        this.sensors = p;
     }
     /**
      * Sets up all the action listeners for the various buttons across the GUI
      * */
     public void setupActions(){
         //Set up the base station
-        station = new BaseStation();
         station.setDeviceState(DeviceState.Away);
         //Set up alert listening for the GUI
         station.addPropertyChangeListener(this);
@@ -55,12 +61,14 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
         disarmSystemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (station.getState() == DeviceState.Off) { return; }
 
-                if(disarmSystemButton.getText() == "Home Mode"){
+                if(station.getState() == DeviceState.Home){
                     disarmSystemButton.setText("Away Mode");
                     disarmSystemButton.setBackground(new Color(255,0,8));
                     //Change the base station state
                     station.setDeviceState(DeviceState.Away);
+                    sensors.setState(DeviceState.Away);
                     System.out.println(station.getState());
 
                     //Change all the sensor values
@@ -69,13 +77,6 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
                             ((SensorPanel)component).status.setText("Status: Disabled");
                         }
                     }
-                    //Change all sensor state to home
-                    for(Peripheral peripheral: sensors){
-                        peripheral.setDeviceState(DeviceState.Home);
-                        peripheral.setIsEnabled(false);
-                    }
-
-
                 }
                 else{
                     disarmSystemButton.setText("Home Mode");
@@ -83,23 +84,10 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
 
                     //Change the base station state
                     station.setDeviceState(DeviceState.Home);
+                    sensors.setState(DeviceState.Home);
                     System.out.println(station.getState());
-                    //Change all the sensor values
-                    for(Component component: burglaryPane.getComponents()){
-                        if(component instanceof SensorPanel){
-                            ((SensorPanel)component).status.setText("Status: Enabled");
-                        }
-                    }
-                    //Change all sensor state to away
-                    for(Peripheral peripheral: sensors){
-                        peripheral.setDeviceState(DeviceState.Away);
-                        peripheral.setIsEnabled(true);
-                    }
                 }
                 repaint();
-
-
-
             }
         });
         //Connect/Disconnect Listener: Just adds a new sensor, there is no disconnect feature
@@ -114,43 +102,17 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
 
 
                 //Then register the sensor with the base station
-                Peripheral sensor;
-                if(selectedString.equals("Motion")){
-                    sensor = new MotionSensor();
-                    sensor.setDeviceState(DeviceState.Away);
-                    sensors.add(sensor);
-                }
-                if(selectedString.equals("Glassbreak")){
-                    sensor = new GlassBreakSensor();
-                    sensor.setDeviceState(DeviceState.Away);
-                    sensors.add(sensor);
-                }
-                if(selectedString.equals("Entry")){
-                    sensor = new EntrySensor();
-                    sensor.setDeviceState(DeviceState.Away);
-                    sensors.add(sensor);
-                }
-                else if(selectedString.equals("Smoke")){
-                    sensor = new SmokeSensor();
-                    sensor.setDeviceState(DeviceState.Away);
-                    sensors.add(sensor);
-
-                }
-                else if(selectedString.equals("Water")){
-                     sensor = new WaterSensor();
-                    sensor.setDeviceState((DeviceState.Away));
-                    sensors.add(sensor);
-                }
-                else if(selectedString.equals("Temperature")){
-                    sensor = new TemperatureSensor();
-                    sensor.setDeviceState(DeviceState.Away);
-                    sensors.add(sensor);
-                }
-                else{
-                    sensor = new COsensor();
-                    sensor.setDeviceState(DeviceState.Away);
-                    sensors.add(sensor);
-                }
+                Peripheral sensor = switch (selectedString) {
+                    case "Motion" -> new MotionSensor();
+                    case "Glassbreak" -> new GlassBreakSensor();
+                    case "Entry" -> new EntrySensor();
+                    case "Smoke" -> new SmokeSensor();
+                    case "Water" -> new WaterSensor();
+                    case "Temperature" -> new TemperatureSensor();
+                    default -> new COsensor();
+                };
+                sensor.setDeviceState(DeviceState.Away);
+                sensors.addPeripheral(sensor);
                 station.register(sensor);
                 sensor.registerWithBaseStation(station);
                 //test alert
@@ -177,46 +139,36 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
                     else{
                         continue;
                     }
-
-
                 }
-
 
                 mainPanel.revalidate();
                 repaint();
-
             }
         });
 
         //Connect/Disconnect camera Listener: Adds a new placeholder for a camera, cannot delete cameras
-        connectCameraButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cameras.setLayout(new BoxLayout(cameras, BoxLayout.PAGE_AXIS));
-                String cameraName = JOptionPane.showInputDialog(panel1, "Name your camera", null);
-                cameras.add(new JLabel(cameraName));
-                cameras.add(new JButton("This is placeholder"));
-                cameras.revalidate();
-                mainPanel.revalidate();
-                repaint();
-            }
+        connectCameraButton.addActionListener(e -> {
+            cameras.setLayout(new BoxLayout(cameras, BoxLayout.PAGE_AXIS));
+            String cameraName = JOptionPane.showInputDialog(panel1, "Name your camera", null);
+            cameras.add(new JLabel(cameraName));
+            cameras.add(new JButton("This is placeholder"));
+            cameras.revalidate();
+            mainPanel.revalidate();
+            repaint();
         });
 
         //A listener for the main system power button
-        systemPowerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(systemPowerButton.getText() == "Power Off"){
-                    systemPowerButton.setText("Power On");
-                    systemPowerButton.setBackground(new Color(179,241,157));
-                    updateAllSensorsPower("Power Off");
+        systemPowerButton.addActionListener(e -> {
+            if(systemPowerButton.getText().equals("Power Off")){
+                systemPowerButton.setText("Power On");
+                systemPowerButton.setBackground(new Color(179,241,157));
+                updateAllSensorsPower("Power Off");
 
-                }
-                else{
-                    systemPowerButton.setText("Power Off");
-                    systemPowerButton.setBackground(new Color(255,0,9));
-                    updateAllSensorsPower("Power On");
-                }
+            }
+            else{
+                systemPowerButton.setText("Power Off");
+                systemPowerButton.setBackground(new Color(255,0,9));
+                updateAllSensorsPower("Power On");
             }
         });
     }
@@ -238,7 +190,7 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
                 }
             }
 
-            for(Peripheral peripheral: sensors){
+            for(Peripheral peripheral: sensors.peripherals){
                 peripheral.setDeviceState(DeviceState.Home);
                 peripheral.buttonPress();
             }
@@ -257,7 +209,7 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
                 }
             }
 
-            for(Peripheral peripheral: sensors){
+            for(Peripheral peripheral: sensors.peripherals){
                 peripheral.setDeviceState(DeviceState.Off);
                 peripheral.buttonPress();
                 station.register(peripheral);
@@ -281,10 +233,12 @@ public class MainGUI extends JFrame implements PropertyChangeListener {
     /**
      * The main method to run the GUI
      * */
-    public static void main(String[] args){
-        JFrame frame = new MainGUI("Ninja Protection Services");
+    public static MainGUI newGUI(String name, BaseStation bs, PeripheralController p){
+        MainGUI frame = new MainGUI(name);
+        frame.setBaseStation(bs);
+        frame.setPeripheralController(p);
+        frame.setupActions();
         frame.setVisible(true);
+        return frame;
     }
-
-
 }
