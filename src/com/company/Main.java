@@ -7,7 +7,6 @@ import java.util.TimerTask;
 
 public class Main {
     public static void main(String[] args) {
-        Timer eventTimer = new Timer();
         Timer peripheralPollTimer = new Timer();
         BaseStation baseStation = new BaseStation();
         baseStation.init();
