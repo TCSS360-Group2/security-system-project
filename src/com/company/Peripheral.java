@@ -1,8 +1,5 @@
 package com.company;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public abstract class Peripheral extends Device {
     private BaseStation baseStation = null;
 

@@ -1,7 +1,5 @@
 package com.company;
 
-import java.util.zip.DeflaterInputStream;
-
 enum DeviceState {
     Home,
     Away,
